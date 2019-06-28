@@ -18,8 +18,15 @@ func main() {
 	var app = new(app.App)
 	var wait time.Duration
 	var server *http.Server
+	var err error
 
 	app.AppRouter = mux.NewRouter()
+	if app.AppLog, err = os.OpenFile("logs/log.txt", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666); err != nil {
+		log.Println(err.Error())
+		log.Fatal("Cannot open log file. Server shutting down.")
+	}
+	defer app.AppLog.Close()
+	log.SetOutput(app.AppLog)
 
 	server = &http.Server{
 		Addr:           ":9000",

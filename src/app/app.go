@@ -2,6 +2,7 @@ package app
 
 import (
 	"database/sql"
+	"os"
 
 	"github.com/gorilla/mux"
 	"github.com/tonyooi/go-base-uservice/src/di"
@@ -12,4 +13,5 @@ type App struct {
 	AppRouter *mux.Router
 	AppDb     *sql.DB
 	AppDI     di.DI
+	AppLog    *os.File
 }
