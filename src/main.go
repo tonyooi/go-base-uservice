@@ -23,11 +23,13 @@ func main() {
 	var err error
 
 	app.AppRouter = mux.NewRouter()
+
 	if file, err = os.OpenFile("logs/log.txt", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666); err != nil {
 		log.Println(err.Error())
 		log.Fatal("Cannot open log file. Server shutting down.")
 	}
 	file.Close()
+
 	log.SetOutput(&lumberjack.Logger{
 		Filename:   "logs/log.txt",
 		MaxSize:    500, // megabytes
