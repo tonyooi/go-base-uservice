@@ -11,6 +11,7 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/tonyooi/go-base-uservice/src/app"
+	"gopkg.in/natefinch/lumberjack.v2"
 )
 
 func main() {
@@ -18,15 +19,22 @@ func main() {
 	var app = new(app.App)
 	var wait time.Duration
 	var server *http.Server
+	var file *os.File
 	var err error
 
 	app.AppRouter = mux.NewRouter()
-	if app.AppLog, err = os.OpenFile("logs/log.txt", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666); err != nil {
+	if file, err = os.OpenFile("logs/log.txt", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666); err != nil {
 		log.Println(err.Error())
 		log.Fatal("Cannot open log file. Server shutting down.")
 	}
-	defer app.AppLog.Close()
-	log.SetOutput(app.AppLog)
+	file.Close()
+	log.SetOutput(&lumberjack.Logger{
+		Filename:   "logs/log.txt",
+		MaxSize:    500, // megabytes
+		MaxBackups: 3,
+		MaxAge:     28,   //days
+		Compress:   true, // disabled by default
+	})
 
 	server = &http.Server{
 		Addr:           ":9000",
