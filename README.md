@@ -1,2 +1,15 @@
 # go-base-uservice
 Golang base micro service
+
+
+To run
+
+```console
+go run ./src/main.go
+```
+
+To compile to /bin
+
+```console
+go build -o ./bin/main ./src/main.go
+```
